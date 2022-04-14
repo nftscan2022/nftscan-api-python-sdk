@@ -1,4 +1,5 @@
 import json
+from multiprocessing.dummy import Array
 import requests
 from datetime import datetime, timedelta
 from numbers import Number
@@ -7,7 +8,7 @@ from parameters_validation import validate_parameters, parameter_validation, non
 from . import utils
 
 
-
+MAX_PAGE_SIZE = 100
 # Validators
 @parameter_validation
 def erc_valid(erc: str):
@@ -28,7 +29,6 @@ def more_than_zero(number: Number,  arg_name: str):
         raise 
 
 class NftScanAPI:
-    MAX_PAGE_SIZE = 100
     @validate_parameters
     def __init__(self, 
                 apiKey: non_blank(str),
@@ -548,5 +548,180 @@ class NftScanAPI:
             "page_index": page_index,
             "page_size": page_size,
             "user_address":user_address
+        }
+        return self._api_request(endpoint, data, export_file_name)
+
+
+
+class NftScanProAPI(NftScanAPI):
+
+    @validate_parameters
+    def getAllNftPlatformInformation(
+        self,
+        page_index: more_than_zero(int)=1,
+        page_size: non_negative(int)=20,
+        create_block_number: non_blank(str)="",
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getAllNftPlatformInformationUsingPOST
+
+        Args:
+            create_block_number (str): Create block number  
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            [array]: All nft platform information for the block
+        """
+        endpoint = f"getAllNftPlatformInformation"
+        data = {
+            "page_index": page_index,
+            "page_size": page_size,
+            "create_block_number": create_block_number,
+        }
+        return self._api_request(endpoint, data, export_file_name)
+    
+
+    @validate_parameters
+    def getNftByContract(
+        self,
+        page_index: more_than_zero(int)=1,
+        page_size: non_negative(int)=20,
+        nft_address: non_blank(str)="",
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getNftByContractUsingPOST
+
+        Args:
+            nft_address (str): Nft address
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            [array]: All nfts by contract
+        """
+        endpoint = f"getNftByContract"
+        data = {
+            "page_index": page_index,
+            "page_size": page_size,
+            "nft_address": nft_address,
+        }
+        return self._api_request(endpoint, data, export_file_name)
+        
+
+    @validate_parameters
+    def getNftByContractList(
+        self,
+        addressAndTokenIdReqList: Array=[],
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getNftByContractListUsingPOST
+
+        Args:
+            addressAndTokenIdReqList (Array): array of objects, mapping nft_address (string) to token_id (string). Eg:
+            "addressAndTokenIdReqList": [
+                {
+                    "nft_address": "0xaa20f900e24ca7ed897c44d92012158f436ef791",
+                    "token_id": "0x000000000000000000000000000000000000000000000000000000000000270c"
+                }
+            ]
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            [array]: All nfts by contract
+        """
+        endpoint = f"getNftByContractList"
+        data = {
+            "addressAndTokenIdReqList": addressAndTokenIdReqList,
+        }
+        return self._api_request(endpoint, data, export_file_name)
+
+
+    @validate_parameters
+    def getNftOwnerByContract(
+        self,
+        page_index: more_than_zero(int)=1,
+        page_size: non_negative(int)=20,
+        nft_address: non_blank(str)="",
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getNftOwnerByContractUsingPOST
+
+        Args:
+            nft_address (str): Nft address
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            [array]: Owner information
+        """
+        endpoint = f"getNftOwnerByContract"
+        data = {
+            "page_index": page_index,
+            "page_size": page_size,
+            "nft_address": nft_address,
+        }
+        return self._api_request(endpoint, data, export_file_name)
+
+
+    @validate_parameters
+    def getNftPlatformInformation(
+        self,
+        nft_address: non_blank(str)="",
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getNftPlatformInformationUsingPOST
+
+        Args:
+            nft_address (str): Nft address
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            Platform information
+        """
+        endpoint = f"getNftPlatformInformation"
+        data = {
+            "nft_address": nft_address,
+        }
+        return self._api_request(endpoint, data, export_file_name)
+    
+
+    @validate_parameters
+    def getNftRecordByParameter(
+        self,
+        page_index: more_than_zero(int)=1,
+        page_size: non_negative(int)=20,
+        block_number_start: more_than_zero(int)=1,
+        block_number_end: non_negative(int)=20,
+        nft_contract_address: Array=[],
+        export_file_name: str="",
+    ):
+        """Fetches Nft data from the API. 
+        https://developer.nftscan.com/doc/#operation/getNftRecordByParameterUsingPOST
+
+        Args:
+            block_number_start (int64): Start block height
+            block_number_end (int64): End block height
+            nft_contract_address (Array): NFT contract address  
+            export_file_name (str, optional): Exports the JSON data into a the
+            specified file.
+
+        Returns:
+            [array]: Owner information
+        """
+        endpoint = f"getNftRecordByParameter"
+        data = {
+            "page_index": page_index,
+            "page_size": page_size,
+            "block_number_start": block_number_start,
+            "block_number_end": block_number_end,
+            "nft_contract_address": nft_contract_address,
         }
         return self._api_request(endpoint, data, export_file_name)
