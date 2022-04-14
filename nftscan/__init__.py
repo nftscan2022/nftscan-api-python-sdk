@@ -2,7 +2,7 @@
 
 __author__ = """Alex Ausch"""
 __email__ = "hello@ausch.name"
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 __all__ = [#"Events", "Asset", "Assets", "Contract", "Collection",
            #"CollectionStats", "Collections", "Bundles", 
            "utils",
@@ -13,5 +13,5 @@ __all__ = [#"Events", "Asset", "Assets", "Contract", "Collection",
 # from nftscan.nftscan_api import NftScanAPI
 # from nftscan import utils
 
-from .nftscan_api import NftScanAPI
+from .nftscan_api import NftScanAPI, NftScanProAPI
 from . import utils

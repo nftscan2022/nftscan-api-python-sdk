@@ -1,3 +1,8 @@
+## 0.1.4 (2022-04-14)
+
+Partial support for pro API
+Fixed missing dependencies and bad formatting for requirements.dev.stxt
+
 ## 0.1.3 (2022-03-31)
 
 Moved source repo to main NFTScan github org - https://github.com/nftscan2022/nftscan-api-python-sdk
