@@ -10,7 +10,7 @@ with open('README.md') as readme_file:
 with open('HISTORY.md') as history_file:
     history = history_file.read()
 
-requirements = ['requests>=2.27.1']
+requirements = ['requests>=2.27.1', 'parameters-validation==1.2.0']
 
 test_requirements = ['pytest>=3', ]
 
